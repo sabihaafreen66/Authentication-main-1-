@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import classes from './AuthForm.module.css';
 
-const AuthForm = ({ onLogin }) => {
+const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);
@@ -10,49 +10,49 @@ const AuthForm = ({ onLogin }) => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
-    let url;
-    if (isLogin) {
-      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoM';
-    } else {
-      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoM';
-    }
+    const url = isLogin
+      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoMY'
+      : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoM';
 
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        email: enteredEmail,
-        password: enteredPassword,
-        returnSecureToken: true,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return res.json().then((data) => {
-            let errorMessage = 'Authentication failed!';
-            if (data && data.error && data.error.message) {
-              errorMessage = data.error.message;
-            }
-            throw new Error(errorMessage);
-          });
-        }
-      })
-      .then((data) => {
-        onLogin(data.idToken); // Pass the token to the login handler
-      })
-      .catch((err) => {
-        alert(err.message);
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (!response.ok) {
+        const data = await response.json();
+        let errorMessage = 'Authentication failed!';
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
+      console.log('Response Payload:', data); // Print the full payload to the console
+      if (isLogin) {
+        console.log('Login successful:', data);
+      } else {
+        console.log('Signup successful:', data);
+      }
+    } catch (err) {
+      console.error('Error:', err); // Log the error to the console for debugging
+      alert(err.message);
+    }
   };
 
   return (
