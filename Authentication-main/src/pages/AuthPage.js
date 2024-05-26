@@ -1,15 +1,8 @@
-import { useContext } from 'react';
+import React from 'react';
 import AuthForm from '../components/Auth/AuthForm';
-import AuthContext from '../store/AuthContext';
 
 const AuthPage = () => {
-  const authCtx = useContext(AuthContext);
-
-  const loginHandler = (token) => {
-    authCtx.login(token);
-  };
-
-  return <AuthForm onLogin={loginHandler} />;
+  return <AuthForm />;
 };
 
 export default AuthPage;

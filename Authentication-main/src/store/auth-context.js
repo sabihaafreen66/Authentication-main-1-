@@ -1,37 +1,38 @@
-// src/store/auth-context.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 const AuthContext = React.createContext({
   token: '',
+  email: '',
   isLoggedIn: false,
-  login: (token) => {},
+  login: (token, email) => {},
   logout: () => {},
 });
 
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem('token');
+  const initialEmail = localStorage.getItem('email');
   const [token, setToken] = useState(initialToken);
+  const [email, setEmail] = useState(initialEmail);
 
   const userIsLoggedIn = !!token;
 
-  const loginHandler = (token) => {
+  const loginHandler = (token, email) => {
     setToken(token);
+    setEmail(email);
     localStorage.setItem('token', token);
+    localStorage.setItem('email', email);
   };
 
-  const logoutHandler = useCallback(() => {
-    setToken(null);
+  const logoutHandler = () => {
+    setToken('');
+    setEmail('');
     localStorage.removeItem('token');
-  }, []);
-
-  useEffect(() => {
-    if (initialToken) {
-      setToken(initialToken);
-    }
-  }, [initialToken]);
+    localStorage.removeItem('email');
+  };
 
   const contextValue = {
     token: token,
+    email: email,
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
@@ -42,6 +43,10 @@ export const AuthContextProvider = (props) => {
       {props.children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  return useContext(AuthContext);
 };
 
 export default AuthContext;

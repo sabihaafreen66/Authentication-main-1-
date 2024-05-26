@@ -1,10 +1,14 @@
 import { useState, useRef } from 'react';
 import classes from './AuthForm.module.css';
+import { useAuth } from '../../store/auth-context';
+import { useHistory } from 'react-router-dom';
 
 const AuthForm = () => {
+  const authCtx = useAuth();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);
+  const history = useHistory();
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -17,7 +21,7 @@ const AuthForm = () => {
     const enteredPassword = passwordInputRef.current.value;
 
     const url = isLogin
-      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoMY'
+      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoM'
       : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCkaaywAlKWT-maqKqfdTdCr4nHdkOlaoM';
 
     try {
@@ -44,11 +48,8 @@ const AuthForm = () => {
 
       const data = await response.json();
       console.log('Response Payload:', data); // Print the full payload to the console
-      if (isLogin) {
-        console.log('Login successful:', data);
-      } else {
-        console.log('Signup successful:', data);
-      }
+      authCtx.login(data.idToken, data.email); // Store token and email in context
+      history.replace('/profile'); // Redirect to profile page
     } catch (err) {
       console.error('Error:', err); // Log the error to the console for debugging
       alert(err.message);
