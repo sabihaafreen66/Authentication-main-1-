@@ -1,6 +1,6 @@
 import { useAuth } from '../../store/auth-context';
+import { useHistory, Link } from 'react-router-dom';
 import classes from './UserProfile.module.css';
-import { useHistory } from 'react-router-dom';
 
 const UserProfile = () => {
   const authCtx = useAuth();
@@ -16,6 +16,7 @@ const UserProfile = () => {
       <h1>Your User Profile</h1>
       <p>Email: {authCtx.email}</p> {/* Display the user's email */}
       <button onClick={logoutHandler}>Logout</button>
+      <Link to="/change-password" className={classes.changePasswordLink}>Change Password</Link>
     </section>
   );
 };
