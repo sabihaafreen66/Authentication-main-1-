@@ -1,5 +1,6 @@
 import { useAuth } from '../../store/auth-context';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import ChangePasswordForm from './ChangePasswordForm';
 import classes from './UserProfile.module.css';
 
 const UserProfile = () => {
@@ -8,15 +9,14 @@ const UserProfile = () => {
 
   const logoutHandler = () => {
     authCtx.logout();
-    history.replace('/auth'); // Redirect to login page
+    history.replace('/auth');
   };
 
   return (
     <section className={classes.profile}>
       <h1>Your User Profile</h1>
-      <p>Email: {authCtx.email}</p> {/* Display the user's email */}
+      <ChangePasswordForm />
       <button onClick={logoutHandler}>Logout</button>
-      <Link to="/change-password" className={classes.changePasswordLink}>Change Password</Link>
     </section>
   );
 };
