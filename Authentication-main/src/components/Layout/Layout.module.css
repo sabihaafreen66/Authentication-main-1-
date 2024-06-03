@@ -1,0 +1,39 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #4f005f;
+    color: white;
+  }
+  
+  .header a {
+    color: white;
+    text-decoration: none;
+    margin: 0 1rem;
+  }
+  
+  .header a:hover,
+  .header a:active {
+    text-decoration: underline;
+  }
+  
+  .logout {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .logout:hover,
+  .logout:active {
+    background-color: #3a003a;
+    border-color: #3a003a;
+  }
+  
+  main {
+    padding: 1rem;
+  }
+  

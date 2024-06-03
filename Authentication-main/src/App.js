@@ -11,22 +11,25 @@ function App() {
   return (
     <Layout>
       <Switch>
-        <Route path='/' exact>
-          <HomePage />
-        </Route>
         {!authCtx.isLoggedIn && (
-          <Route path='/auth'>
-            <AuthPage />
-          </Route>
+          <>
+            <Route path='/auth'>
+              <AuthPage />
+            </Route>
+            <Redirect to='/auth' />
+          </>
         )}
         {authCtx.isLoggedIn && (
-          <Route path='/profile'>
-            <UserProfile />
-          </Route>
+          <>
+            <Route path='/' exact>
+              <HomePage />
+            </Route>
+            <Route path='/profile'>
+              <UserProfile />
+            </Route>
+            <Redirect to='/' />
+          </>
         )}
-        <Route path='*'>
-          <Redirect to='/' />
-        </Route>
       </Switch>
     </Layout>
   );

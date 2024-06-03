@@ -15,7 +15,7 @@ const UserProfile = () => {
   return (
     <section className={classes.profile}>
       <h1>Your User Profile</h1>
-      <ChangePasswordForm />
+     <ChangePasswordForm/>
       <button onClick={logoutHandler}>Logout</button>
     </section>
   );

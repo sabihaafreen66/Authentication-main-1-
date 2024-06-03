@@ -1,5 +1,7 @@
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../../store/auth-context';
+import classes from './Layout.module.css';
+
 const Layout = (props) => {
   const authCtx = useAuth();
   const history = useHistory();
@@ -22,4 +24,3 @@ const Layout = (props) => {
 };
 
 export default Layout;
-
